@@ -1,0 +1,24 @@
+destination : S    weight = 0   path = S
+
+destination : V1    weight = 10   path = V1
+
+destination : V2    weight = 12   path = V2
+
+destination : V3    weight = 11   path = S->V1->V3
+
+destination : V4    weight = 11   path = S->V1->V4
+
+destination : V5    weight = 13   path = S->V1->V3->V5
+
+destination : V6    weight = 18   path = S->V2->V6
+
+destination : V7    weight = 14   path = S->V1->V3->V7
+
+destination : V8    weight = 22   path = S->V2->V6->V8
+
+destination : V9    weight = 15   path = S->V1->V3->V5->V9
+
+destination : V10    weight = 15   path = S->V1->V3->V7->V10
+
+destination : T    weight = 18   path = S->V1->V3->V5->V9->T
+
