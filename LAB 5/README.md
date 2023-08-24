@@ -3,7 +3,7 @@
 * Implement the single-source shortest path algorithm (Dijkstra) to calculate and print the distance from a specified source vertex to every other vertex in the graph.
 * Perform a Depth First Search (DFS) traversal on the graph.
 
-
+![image](LAB 5/LAB5.PNG)
 
 **Input file definition：**
 
