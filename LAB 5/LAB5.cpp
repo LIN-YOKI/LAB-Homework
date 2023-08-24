@@ -18,17 +18,24 @@ struct PATH {
     int previous;
 }path1;
 
-vector <DATA> data_vec;
-vector <PATH> path_vec;
+vector <DATA> data_vec;//all input connection
+vector <PATH> path_vec;//only point
+vector <int> DFS_path_vec;//DFS vector
+vector <int> box;//push pop box
+
 int** table;
 
-//function
+//Function
 DATA readfile(string s);
-int V_max(int Vmax);
-void build_path_vec(void);
 void Dijkstra(void);
+void build_path_vec(void);
 void path_table(int w, int h);
+int V_max(int Vmax);
 int V_number(string point);
+
+void DFS();
+void pop();
+void push(int point_num);
 
 int main(void) {
     string inputtxt;
@@ -40,8 +47,7 @@ int main(void) {
     }
     else {
         string s;
-        while (getline(ifs, s)) {
-            //cout << s << "\n";
+        while (getline(ifs, s)) {           
             data_vec.push_back(readfile(s));
         }
         ifs.close();
@@ -49,8 +55,10 @@ int main(void) {
 
     build_path_vec();//target path
     path_table(path_vec.size(), path_vec.size());//build path table
+
     Dijkstra();
-    
+    DFS();
+
     //output txt
     string output = "";
     ofstream ofs;
@@ -73,27 +81,74 @@ int main(void) {
                 ofs << "destination : V" << i << "    ";
                 ofs << "weight = " << path_vec[i].cost << "   ";
             }
-            ofs << "path = " ;
-            int point,previous;
+            ofs << "path = ";
+            int point, previous;
             previous = path_vec[i].previous;
             point = i;
             output.insert(0, path_vec[point].point);
             while (previous != 0) {
-                previous = path_vec[point].previous;               
+                previous = path_vec[point].previous;
                 output.insert(0, "->");
                 output.insert(0, path_vec[previous].point);
                 point = previous;
-            }              
+            }
             ofs << output << "\n\n";
         }
 
+        ofs << "DFS = ";
+        for (int i = 0; i < DFS_path_vec.size(); i++) {
+            if (i == (DFS_path_vec.size() - 1)) {              
+                if (DFS_path_vec[i] == 0) ofs << "S";
+                else if (DFS_path_vec[i] == (path_vec.size() - 1)) ofs << "T";
+                else  ofs << "V" << DFS_path_vec[i];
+            }
+            else {
+                if (DFS_path_vec[i] == 0) ofs << "S -> ";
+                else if (DFS_path_vec[i] == (path_vec.size() - 1)) ofs << "T -> ";
+                else  ofs << "V" << DFS_path_vec[i] << " -> ";
+            }            
+        }
 
         ofs.close();
     }
     //output txt
 }
 
-void Dijkstra(void) { 
+void DFS() {
+    int i = 0, j = 0, visited = path_vec.size();
+    //initialize visited
+    for (int i = 0; i < path_vec.size(); i++) {
+        path_vec[i].visited = false;
+    }  
+    //DFS
+    push(0);
+    while (visited != 0) {
+        if (box.size() != 0) i = box[box.size() - 1];           
+        
+        pop();
+        visited--;
+        for (j = 0; j < path_vec.size(); j++) {
+            if (table[i][j] < 99999 && !path_vec[j].visited && table[i][j] != 0) {
+                push(j);             
+            }
+        }
+
+    }
+}
+
+void push(int point_num) {
+    box.push_back(point_num);
+}
+
+void pop() {
+    int DFS_path_vec1;
+    DFS_path_vec1 = box[box.size() - 1];
+    DFS_path_vec.push_back(DFS_path_vec1);
+    path_vec[DFS_path_vec1].visited = true;
+    box.pop_back();//刪除最後一個元素
+}
+
+void Dijkstra(void) {
     int point_previous = 0;
     int min_weight, point_min = 0;
     path_vec[0].visited = true;
@@ -135,7 +190,7 @@ void path_table(int w, int h) { //build a w*h matrix
     //initialize
     for (int i = 0; i < h; i++) {
         for (int j = 0; j < w; j++) {
-            if(i == j) table[i][j] = 0;
+            if (i == j) table[i][j] = 0;
             else table[i][j] = 999999999;//999999999     
         }
     }
@@ -153,7 +208,7 @@ void path_table(int w, int h) { //build a w*h matrix
             }
             else { // end != "T"
                 Vnumber = V_number(data_vec[k].end);
-                j = Vnumber;               
+                j = Vnumber;
             }
             table[i][j] = data_vec[k].weight;
         }
@@ -182,8 +237,8 @@ void build_path_vec(void) {
     stringstream temp_number;
     string number;
     for (int i = 0; i < Vmax + 2; i++) {
-        if (i == 0)  path1.point = "S";       
-        else if (i == Vmax + 1) path1.point = "T";          
+        if (i == 0)  path1.point = "S";
+        else if (i == Vmax + 1) path1.point = "T";
         else {
             temp_number.str("");
             temp_number.clear();

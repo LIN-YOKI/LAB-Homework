@@ -22,3 +22,4 @@ destination : V10    weight = 13   path = S->V3->V4->V8->V10
 
 destination : T    weight = 9   path = S->V1->V9->T
 
+DFS = S -> V3 -> V6 -> V7 -> T -> V9 -> V4 -> V8 -> V10 -> V2 -> V5 -> V1

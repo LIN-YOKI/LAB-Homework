@@ -28,3 +28,4 @@ destination : V13    weight = 9   path = S->V2->V4->V7->V10->V13
 
 destination : T    weight = 13   path = S->V2->V6->V8->T
 
+DFS = S -> V2 -> V6 -> V8 -> T -> V10 -> V13 -> V4 -> V7 -> V9 -> V11 -> V12 -> V1 -> V3 -> V5
