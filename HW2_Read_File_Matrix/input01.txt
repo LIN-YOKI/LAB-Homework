@@ -1,0 +1,6 @@
+Matrix_Transpose
+Name : A
+1 2 3 ;
+4 5 6 ;
+7 5 9 ;
+End_Matrix_Transpose
